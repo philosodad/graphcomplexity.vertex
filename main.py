@@ -2,6 +2,7 @@ import SimPy.Simulation as sim
 import random as ran
 import scipy as sci
 import netw
+import obal
 
 def main():
     sim.initialize()

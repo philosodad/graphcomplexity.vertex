@@ -1,7 +1,7 @@
 import SimPy.Simulation as sim
 import random as ran
 import scipy as sci
-import glob
+from obal import G as G
 
 class Node(sim.Process):
     Next_id = 0
@@ -10,7 +10,7 @@ class Node(sim.Process):
         self.id = Node.Next_id
         self.battery_life = ran.randint(100,150)
         Node.Next_id += 1
-        self.x_coord = ran.rand() * glo.bound
+        self.x_coord = ran.random() * G.bound
 
     def run(self):
         print sim.now(), self
