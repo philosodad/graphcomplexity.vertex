@@ -10,7 +10,10 @@ class Node(sim.Process):
         self.id = Node.Next_id
         self.battery_life = ran.randint(100,150)
         Node.Next_id += 1
-        self.x_coord = ran.random() * G.bound
+        self.x = ran.random() * G.bound
+        self.y = ran.random() * G.bound
+        self.targets = {}
+        self.neighbors = {}
 
     def run(self):
         print sim.now(), self
