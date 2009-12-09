@@ -81,7 +81,7 @@ class NodeTestCase(unittest.TestCase):
  
     def test_Covers(self):
         self.node_5.build_covers()
-        assert set([4]) and set ([0,5]) and set([5,4]) and not set ([5]) in self.node_5.covers
+        assert set([4]) and set ([0,5]) and set([5,4]) and not set ([5]) in [a.node_list for a in self.node_5.covers]
         
 suite = unittest.makeSuite(NodeTestCase, 'test')
 

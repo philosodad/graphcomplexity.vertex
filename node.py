@@ -18,8 +18,9 @@ class Node(sim.Process):
         self.covers = []
 
     def run(self):
-        print sim.now(), self.id, self.targets
+        print self.id, [a.id for a in self.targets], [a.id for a in self.neighbors]
         yield sim.hold, self, self.battery_life
+        print sim.now()
         print ("node %s died at %d" % (self.id, sim.now()))
 
     def build_covers(self):
@@ -38,9 +39,9 @@ class Node(sim.Process):
         for a in small_list:
             slots = slots * len(a)
         c = []
-        b = 1
         for i in range(slots):
             c.append([])
+        b = 1
         for i in range(len(small_list)):
             g = 0
             f = 0
@@ -50,7 +51,11 @@ class Node(sim.Process):
                     g+=1
                 f+=1
             b = b * len(small_list[i])
+            
         for a in c:
-            self.covers.append(set(a))
-        
+            self.covers.append(cov.Cover(set(a)))
+        keyed_lifetimes = dict.fromkeys[a.id, a.battery_life for a in neighbors]
+        keyed_lifetimes[self.id] = self.battery_life
+        for a in covers:
+            pass
         return big_list
