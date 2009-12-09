@@ -81,9 +81,9 @@ class NodeTestCase(unittest.TestCase):
         print ("Location is %d,%d" %(self.node_1.x, self.node_1.y))
  
     def test_Covers(self):
-        x = self.node_5.build_covers()
-        print x
-
+        self.node_5.build_covers()
+        assert set([4]) and set ([0,5]) and set([5,4]) and not set ([5]) in self.node_5.covers
+        
 suite = unittest.makeSuite(NodeTestCase, 'test')
 
 runner = unittest.TextTestRunner()
