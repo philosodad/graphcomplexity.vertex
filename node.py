@@ -18,7 +18,7 @@ class Node(sim.Process):
         self.covers = []
 
     def run(self):
-        print sim.now(), self
+        print sim.now(), self.id, self.targets
         yield sim.hold, self, self.battery_life
         print ("node %s died at %d" % (self.id, sim.now()))
 

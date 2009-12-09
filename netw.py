@@ -18,6 +18,7 @@ class NodeSource(sim.Process):
             t = tar.Target()
             self.targets.append(t)
         self.set_targets()
+        self.set_neighborhood()
         for a in self.nodes:
             a.build_covers()
         
@@ -32,6 +33,5 @@ class NodeSource(sim.Process):
         for i in self.nodes:
             for j in self.nodes:
                 if j != i:
-                    if j not in i.neighbors and geo.dist(i,j) < G.comm_range:
+                    if geo.dist(i,j) < G.comm_range:
                         i.neighbors.append(j)
-                        j.neighbors.append(i)
