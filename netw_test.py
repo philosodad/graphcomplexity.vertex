@@ -3,6 +3,8 @@ import unittest
 import netw
 import node
 import targ
+import geom as geo
+from obal import G as G
 
 class NodeSourceTestCase(unittest.TestCase):
     def setUp(self):
@@ -40,15 +42,15 @@ class NodeSourceTestCase(unittest.TestCase):
         self.node_5.battery_life = 140
         self.node_6.battery_life = 150
         self.nodesource = netw.NodeSource()
-        self.nodesource.network['nodes'][self.node_1.id] = self.node_1
-        self.nodesource.network['nodes'][self.node_2.id] = self.node_2   
-        self.nodesource.network['nodes'][self.node_3.id] = self.node_3
-        self.nodesource.network['nodes'][self.node_4.id] = self.node_4
-        self.nodesource.network['nodes'][self.node_5.id] = self.node_5
-        self.nodesource.network['nodes'][self.node_6.id] = self.node_6
-        self.nodesource.network['targets'][self.target_1.id] = self.target_1
-        self.nodesource.network['targets'][self.target_2.id] = self.target_2
-        self.nodesource.network['targets'][self.target_3.id] = self.target_3
+        self.nodesource.nodes.append(self.node_1)
+        self.nodesource.nodes.append(self.node_2)
+        self.nodesource.nodes.append(self.node_3)
+        self.nodesource.nodes.append(self.node_4)
+        self.nodesource.nodes.append(self.node_5)
+        self.nodesource.nodes.append(self.node_6)
+        self.nodesource.targets.append(self.target_1)
+        self.nodesource.targets.append(self.target_2)
+        self.nodesource.targets.append(self.target_3)
 
     def tearDown(self):
         self.node_1 = None
@@ -66,22 +68,18 @@ class NodeSourceTestCase(unittest.TestCase):
 
     def testSetTargets(self):
         self.nodesource.set_targets()
-        assert self.node_2.targets[self.target_1.id] == self.target_1
-        for a in [self.target_3.id]:
-            assert a in self.node_1.targets.keys()
-        for a in [self.node_4.targets, self.node_3.targets]:
-            assert self.target_2.id in a.keys()
-        for a in [self.node_2, self.node_5, self.node_6, self.node_1]:
-            assert self.target_2.id not in a.targets.keys()
-        assert self.target_3.id not in self.node_3.targets.keys()
+        for a in [self.node_4, self.node_3]:
+            assert self.target_2 in a.targets
+        for a in [self.node_1, self.node_5]:
+            assert self.target_3 in a.targets
 
     def testSetNeighborhood(self):
         self.nodesource.set_neighborhood()
-        assert self.node_1.id not in self.node_1.neighbors.keys()
-        for a in [self.node_5.id, self.node_3.id, self.node_2.id]:
-            assert a in self.node_1.neighbors.keys()
-        for a in [self.node_2.id, self.node_6.id, self.node_5.id, self.node_4.id]:
-            assert a in self.node_3.neighbors.keys()
+        assert self.node_1 not in self.node_1.neighbors
+        for a in [self.node_5, self.node_3, self.node_2]:
+            assert a in self.node_1.neighbors
+        for a in [self.node_1, self.node_2, self.node_4, self.node_5, self.node_6]:
+            assert a in self.node_3.neighbors
           
             
 suite = unittest.makeSuite(NodeSourceTestCase, 'test')

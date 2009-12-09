@@ -43,18 +43,17 @@ class NodeTestCase(unittest.TestCase):
         self.node_5.battery_life = 140
         self.node_6.battery_life = 150
         self.nodesource = netw.NodeSource()
-        self.nodesource.network['nodes'][self.node_1.id] = self.node_1
-        self.nodesource.network['nodes'][self.node_2.id] = self.node_2   
-        self.nodesource.network['nodes'][self.node_3.id] = self.node_3
-        self.nodesource.network['nodes'][self.node_4.id] = self.node_4
-        self.nodesource.network['nodes'][self.node_5.id] = self.node_5
-        self.nodesource.network['nodes'][self.node_6.id] = self.node_6
-        self.nodesource.network['targets'][self.target_1.id] = self.target_1
-        self.nodesource.network['targets'][self.target_2.id] = self.target_2
-        self.nodesource.network['targets'][self.target_3.id] = self.target_3
-        self.nodesource.set_neighborhood()
+        self.nodesource.nodes.append(self.node_1)
+        self.nodesource.nodes.append(self.node_2)
+        self.nodesource.nodes.append(self.node_3)
+        self.nodesource.nodes.append(self.node_4)
+        self.nodesource.nodes.append(self.node_5)
+        self.nodesource.nodes.append(self.node_6)
+        self.nodesource.targets.append(self.target_1)
+        self.nodesource.targets.append(self.target_2)
+        self.nodesource.targets.append(self.target_3)
         self.nodesource.set_targets()
-                
+        self.nodesource.set_neighborhood()
 
     def tearDown(self):
         self.node_1 = None

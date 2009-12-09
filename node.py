@@ -13,8 +13,8 @@ class Node(sim.Process):
         Node.Next_id += 1
         self.x = ran.random() * G.bound
         self.y = ran.random() * G.bound
-        self.targets = {}
-        self.neighbors = {}
+        self.targets = []
+        self.neighbors = []
         self.covers = []
 
     def run(self):
@@ -24,13 +24,13 @@ class Node(sim.Process):
 
     def build_covers(self):
         big_list = {}
-        big_list = big_list.fromkeys(self.targets.keys())
+        big_list = big_list.fromkeys(self.targets)
         for a in big_list:
             big_list[a] = [self.id]
 
         for a in self.neighbors:
             for b in big_list.keys():
-                if b in self.neighbors[a].targets.keys():
+                if b in a.targets:
                     big_list[b].append(a)
         
         small_list = big_list.values()
