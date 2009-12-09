@@ -15,7 +15,7 @@ class Node(sim.Process):
         self.y = ran.random() * G.bound
         self.targets = {}
         self.neighbors = {}
-        self.covers = {}
+        self.covers = []
 
     def run(self):
         print sim.now(), self
@@ -32,4 +32,25 @@ class Node(sim.Process):
             for b in big_list.keys():
                 if b in self.neighbors[a].targets.keys():
                     big_list[b].append(a)
+        
+        small_list = big_list.values()
+        slots = 1
+        for a in small_list:
+            slots = slots * len(a)
+        c = []
+        b = 1
+        for i in range(slots):
+            c.append([])
+        for i in range(len(small_list)):
+            g = 0
+            f = 0
+            while g < len(c):
+                for j in range(b):
+                    c[g].append(small_list[i][f%len(small_list[i])])
+                    g+=1
+                f+=1
+            b = b * len(small_list[i])
+        for a in c:
+            self.covers.append(set(a))
+        
         return big_list
