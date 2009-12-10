@@ -3,4 +3,6 @@ class Cover(object):
         self.node_list = n
         self.lifetime = ()
         self.neighbors = []
+        self.degree = len(self.neighbors)
+
     
