@@ -32,7 +32,7 @@ class Node(sim.Process):
         for a in self.neighbors:
             for b in big_list.keys():
                 if b in a.targets:
-                    big_list[b].append(a)
+                    big_list[b].append(a.id)
         
         small_list = big_list.values()
         slots = 1
@@ -54,8 +54,21 @@ class Node(sim.Process):
             
         for a in c:
             self.covers.append(cov.Cover(set(a)))
-        keyed_lifetimes = dict.fromkeys[a.id, a.battery_life for a in neighbors]
-        keyed_lifetimes[self.id] = self.battery_life
-        for a in covers:
-            pass
+            
+        keyed_lifetimes = {}
+        keyed_lifetimes[self.id] =  self.battery_life
+        for a in self.neighbors:
+            keyed_lifetimes[a.id] = a.battery_life
+        for a in self.covers:
+            lives = []
+            for b in a.node_list:
+                lives.append(keyed_lifetimes[b])
+            lives.sort()
+            a.lifetime = lives.pop()
         return big_list
+
+    def get_cover(self, x):
+        for a in self.covers:
+            if x == a.node_list:
+                return a
+        return None

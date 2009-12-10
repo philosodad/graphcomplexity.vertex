@@ -5,6 +5,7 @@ import unittest
 import node
 import targ
 import netw
+import cove as cov
 from obal import G as G
 
 class NodeTestCase(unittest.TestCase):
@@ -82,7 +83,10 @@ class NodeTestCase(unittest.TestCase):
     def test_Covers(self):
         self.node_5.build_covers()
         assert set([4]) and set ([0,5]) and set([5,4]) and not set ([5]) in [a.node_list for a in self.node_5.covers]
-        
+        assert type(self.node_5.get_cover(set([0,5]))) == cov.Cover
+        assert self.node_5.get_cover(set([0,5])).lifetime >= 150
+
+
 suite = unittest.makeSuite(NodeTestCase, 'test')
 
 runner = unittest.TextTestRunner()
