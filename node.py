@@ -3,6 +3,7 @@ import random as ran
 import scipy as sci
 import cove as cov
 from obal import G as G
+import bild as bil
 
 class Node(sim.Process):
     Next_id = 0
@@ -16,6 +17,7 @@ class Node(sim.Process):
         self.targets = []
         self.neighbors = []
         self.covers = []
+        self.on = False
 
     def run(self):
         print self.id, [a.id for a in self.targets], [a.id for a in self.neighbors]
@@ -24,48 +26,11 @@ class Node(sim.Process):
         print ("node %s died at %d" % (self.id, sim.now()))
 
     def build_covers(self):
-        big_list = {}
-        big_list = big_list.fromkeys(self.targets)
-        for a in big_list:
-            big_list[a] = [self.id]
-
-        for a in self.neighbors:
-            for b in big_list.keys():
-                if b in a.targets:
-                    big_list[b].append(a.id)
-        
-        small_list = big_list.values()
-        slots = 1
-        for a in small_list:
-            slots = slots * len(a)
-        c = []
-        for i in range(slots):
-            c.append([])
-        b = 1
-        for i in range(len(small_list)):
-            g = 0
-            f = 0
-            while g < len(c):
-                for j in range(b):
-                    c[g].append(small_list[i][f%len(small_list[i])])
-                    g+=1
-                f+=1
-            b = b * len(small_list[i])
-            
-        for a in c:
-            self.covers.append(cov.Cover(set(a)))
-            
-        keyed_lifetimes = {}
-        keyed_lifetimes[self.id] =  self.battery_life
-        for a in self.neighbors:
-            keyed_lifetimes[a.id] = a.battery_life
-        for a in self.covers:
-            lives = []
-            for b in a.node_list:
-                lives.append(keyed_lifetimes[b])
-            lives.sort()
-            a.lifetime = lives.pop()
-        return big_list
+        bil.init_covers(self)
+        bil.update_degree(self)
+        bil.update_lifetime(self)
+        bil.update_on(self)
+        self.covers.sort()
 
     def get_cover(self, x):
         for a in self.covers:
