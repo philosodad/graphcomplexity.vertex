@@ -56,7 +56,10 @@ def update_lifetime(n):
         for b in a.node_list:
             lives.append(keyed_lifetimes[b])
         lives.sort()
-        a.lifetime = lives.pop()
+        try:
+            a.lifetime = lives.pop()
+        except:
+            print ("node %s failed for %s" %(n.id, a.node_list))
 
 def update_on(n):
     keyed_on = {}
