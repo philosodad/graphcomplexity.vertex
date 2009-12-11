@@ -26,11 +26,12 @@ class Node(sim.Process):
         print ("node %s died at %d" % (self.id, sim.now()))
 
     def build_covers(self):
-        bil.init_covers(self)
-        bil.update_degree(self)
-        bil.update_lifetime(self)
-        bil.update_on(self)
-        self.covers.sort()
+        if len(self.targets) > 0:
+            bil.init_covers(self)
+            bil.update_degree(self)
+            bil.update_lifetime(self)
+            bil.update_on(self)
+            self.covers.sort()
 
     def get_cover(self, x):
         for a in self.covers:
