@@ -16,10 +16,14 @@ class Cover(object):
             return -1
         elif self.degree > other.degree:
             return 1
-        elif self.on < other.on:
-            return 1
-        elif self.on > other.on:
+        elif self.lifetime > other.lifetime:
             return -1
+        elif self.lifetime < other.lifetime:
+            return 1
+        elif self.on < other.on:
+            return -1
+        elif self.on > other.on:
+            return 1
         else:
             if min(self.node_list) < min(other.node_list):
                 return -1
@@ -36,4 +40,7 @@ class Cover(object):
                     return -1
                 else:
                     return 1
+
+    def __repr__(self):
+        return ("%s, l:%s, d%s, o:%s" %(self.node_list, self.lifetime, self.degree, self.on))
     
