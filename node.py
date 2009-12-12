@@ -4,6 +4,7 @@ import scipy as sci
 import cove as cov
 from obal import G as G
 import bild as bil
+import auto as aut
 
 class Node(sim.Process):
     Next_id = 0
@@ -17,7 +18,9 @@ class Node(sim.Process):
         self.targets = []
         self.neighbors = []
         self.covers = []
-        self.on = False
+        self.on = True
+        self.current_cover = None
+        self.current_cover_index = 0
 
     def run(self):
         print self.id, [a.id for a in self.targets], [a.id for a in self.neighbors]
@@ -32,9 +35,22 @@ class Node(sim.Process):
             bil.update_lifetime(self)
             bil.update_on(self)
             self.covers.sort()
+            self.current_cover_index = 0
+            self.current_cover = self.covers[0]
+        else:
+            self.on = False
+
+    def update_covers(self):
+        bil.update_degree(self)
+        bil.update_lifetime(self)
+        bil.update_on(self)
+        self.covers.sort()
 
     def get_cover(self, x):
         for a in self.covers:
             if x == a.node_list:
                 return a
         return None
+
+
+            

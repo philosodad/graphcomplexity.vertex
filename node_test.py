@@ -6,6 +6,7 @@ import node
 import targ
 import netw
 import cove as cov
+import auto as aut
 from obal import G as G
 
 class NodeTestCase(unittest.TestCase):
@@ -43,12 +44,6 @@ class NodeTestCase(unittest.TestCase):
         self.node_3.battery_life = 130
         self.node_4.battery_life = 120
         self.node_5.battery_life = 110
-        self.node_0.on = True
-        self.node_1.on = True
-        self.node_2.on = False
-        self.node_3.on = True
-        self.node_4.on = True
-        self.node_5.on = False
         self.nodesource = netw.NodeSource()
         self.nodesource.nodes.append(self.node_0)
         self.nodesource.nodes.append(self.node_1)
@@ -87,10 +82,17 @@ class NodeTestCase(unittest.TestCase):
         print ("Location is %d,%d" %(self.node_0.x, self.node_0.y))
  
     def test_Covers(self):
+        self.node_0.build_covers()
+        self.node_1.build_covers()
+        self.node_3.build_covers()
+        self.node_5.build_covers()
         self.node_4.build_covers()
         self.node_2.build_covers()
         print [("%s: %s" %(a.node_list, a.degree)) for a in self.node_4.covers]
-        assert set([4]) and set ([0,5]) and set([5,4]) and not set ([5]) in [a.node_list for a in self.node_5.covers]
+        
+        for x in set([4]), set ([0,5]), set([5,4]):
+            assert x in [a.node_list for a in self.node_4.covers]
+        assert not set([5]) in [a.node_list for a in self.node_4.covers]
         assert type(self.node_4.get_cover(set([0,5]))) == cov.Cover
         assert self.node_4.get_cover(set([0,5])).lifetime == 110
         print self.node_4.get_cover(set([0,5])).degree
@@ -105,10 +107,15 @@ class NodeTestCase(unittest.TestCase):
         x = self.node_4.get_cover(set([4,5]))
         y = self.node_4.get_cover(set([2,1]))
         assert x.degree == y.degree
-        assert x.on == y.on
+        print x.on, y.on
         assert x > y
-
-#        assert self.node_2.get_cover(set([2,4])).degree == 8
+        print [a for a in self.node_0.covers]
+        assert self.node_0.on
+        print [a for a in self.node_4.covers]
+        aut.automata(self.node_4, self.node_2.id)
+        assert not self.node_4.on
+        print [a for a in self.node_4.covers]
+        print [a for a in self.node_0.covers]
 
 suite = unittest.makeSuite(NodeTestCase, 'test')
 
