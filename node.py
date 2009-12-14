@@ -1,4 +1,4 @@
-import SimPy.Simulation as sim
+import SimPy.SimulationTrace as sim
 import random as ran
 import scipy as sci
 import cove as cov
@@ -23,10 +23,25 @@ class Node(sim.Process):
         self.current_cover_index = 0
 
     def run(self):
-        print self.id, [a.id for a in self.targets], [a.id for a in self.neighbors]
-        yield sim.hold, self, self.battery_life
-        print sim.now()
-        print ("node %s died at %d" % (self.id, sim.now()))
+        
+        while 1:
+            print self.id, self.battery_life, self.on, [a.id for a in self.targets], [a.id for a in self.neighbors]
+            if self.on:
+                now = sim.now()
+                yield sim.hold, self, self.battery_life
+                self.battery_life = 0
+                self.on = False
+                for a in self.neighbors:
+                    if not a.on:
+                        a.update_covers
+                for a in self.neighbors:
+                    aut.automata(a, self.id)
+                for a in self.neighbors:
+                    if a.on:
+                        sim.reactivate(a)
+                print ("node %s died at %d" % (self.id, sim.now()))
+            else:
+                yield sim.passivate, self
 
     def build_covers(self):
         if len(self.targets) > 0:

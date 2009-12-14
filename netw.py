@@ -4,9 +4,10 @@ import scipy as sci
 import node as nod
 import targ as tar
 import geom as geo
+import auto as aut
 from obal import G as G
 
-class NodeSource(sim.Process):
+class NodeSource(object):
     nodes = []
     targets = []
     def generate(self, many, targs):
@@ -21,6 +22,9 @@ class NodeSource(sim.Process):
         self.set_neighborhood()
         for a in self.nodes:
             a.build_covers()
+        for a in self.nodes:
+            for b in a.neighbors:
+                aut.automata(b, a.id)
         
 
     def set_targets(self):
