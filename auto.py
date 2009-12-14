@@ -2,7 +2,8 @@ def automata(n, sender):
     while 1:
         if not n.current_cover:
             return None
-
+        if n.battery_life == 0:
+            return None
         n.update_covers()
         if n.covers[n.current_cover_index] != n.current_cover:
             lower = False
@@ -27,7 +28,7 @@ def automata(n, sender):
                 n.on = False
                 n.update_covers()
                 for a in n.neighbors:
-                    print("%s calling %s.noto" %(n.id, a.id))
+                 #   print("%s calling %s.noto" %(n.id, a.id))
                     automata(a, n.id)
                 return None
             else:
@@ -39,7 +40,7 @@ def automata(n, sender):
                 n.on = True
                 n.update_covers()
                 for a in n.neighbors:
-                    a.automata(n.id)
+                    automata(a, n.id)
                     return None
             else:
                 return None
