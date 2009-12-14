@@ -1,3 +1,7 @@
+#bild.py
+#j.paul daigle
+#This files constructs all of the cover sets, using the definition of a cover and a target found in targ.py and cove.py
+
 import cove as cov
 
 def build_covers(self):

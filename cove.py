@@ -1,3 +1,7 @@
+#cove.py
+#j.paul daigle
+#Cover object contains the basic description of a cover and the function overrides for comparison and printing
+
 class Cover(object):
     def __init__(self, n):
         self.node_list = n
