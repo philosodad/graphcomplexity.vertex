@@ -1,3 +1,7 @@
+#netw.py
+#j.paul daigle
+#generation and data structure for the network as a whole. 
+
 import SimPy.Simulation as sim
 import random as ran
 import scipy as sci
@@ -15,6 +19,7 @@ class NodeSource(object):
             n = nod.Node()
             sim.activate(n, n.run()) 
             self.nodes.append(n)
+        # Target constructor should be abstracted from this class to allow different algorithms, target coverage, area coverage, etc.
         for i in xrange(targs):
             t = tar.Target()
             self.targets.append(t)
@@ -26,7 +31,7 @@ class NodeSource(object):
             for b in a.neighbors:
                 aut.automata(b, a.id)
         
-
+    #these should be imported from another file, again for system flexibility            
     def set_targets(self):
         for i in self.nodes:
             for j in self.targets:

@@ -1,3 +1,7 @@
+#node.py
+#paul daigle
+#Class file that contains the main process (sensor nodes) and logic for the simulation
+
 import SimPy.SimulationTrace as sim
 import random as ran
 import scipy as sci

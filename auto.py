@@ -1,3 +1,7 @@
+#auto.py
+#j.paul daigle
+#The basic automata for the framework as a whole.
+
 def automata(n, sender):
     while 1:
         if not n.current_cover:
