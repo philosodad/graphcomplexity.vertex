@@ -30,19 +30,17 @@ class Node(sim.Process):
         
         while 1:
             print self.id, self.battery_life, self.on, [a.id for a in self.targets], [a.id for a in self.neighbors]
+            now = sim.now()
             if self.on:
-                now = sim.now()
                 yield sim.hold, self, self.battery_life
                 self.battery_life = 0
                 self.on = False
                 for a in self.neighbors:
                     if not a.on:
                         a.update_covers
-                for a in self.neighbors:
-                    aut.automata(a, self.id)
-                for a in self.neighbors:
-                    if a.on:
-                        sim.reactivate(a)
+                        aut.automata(a, self.id)
+                        if a.on:
+                            sim.reactivate(a)
                 print ("node %s died at %d" % (self.id, sim.now()))
             else:
                 yield sim.passivate, self
