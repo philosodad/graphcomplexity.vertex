@@ -8,6 +8,7 @@ class Cover(object):
         self.lifetime = ()
         self.degree = 0
         self.on = 0
+        self.covered = False
 
     def __eq__(self, other):
         return id(self) == id(other)

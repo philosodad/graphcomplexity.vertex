@@ -13,9 +13,13 @@ import tast as tas
 import edst as eds
 from obal import G as G
 
-class NodeSource(object):
+class NodeSource(sim.Process):
     nodes = []
     targets = []
+    Next_id = 0
+    def __init__(self):
+        sim.Process.__init__(self, name="node"+str(NodeSource.Next_id))
+
     def generate(self, many, targs):
         for i in xrange(many):
             n = nod.Node()
@@ -29,4 +33,3 @@ class NodeSource(object):
         for a in self.nodes:
             for b in a.neighbors:
                 aut.automata(b, a.id)
-        

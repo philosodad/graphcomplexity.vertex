@@ -7,7 +7,7 @@ import obal
 def main():
     sim.initialize()
     net = netw.NodeSource()
-    net.generate(5, 5)
+    net.generate(10, 5)
     sim.simulate(until=400)
 
 main()
