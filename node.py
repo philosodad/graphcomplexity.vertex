@@ -29,7 +29,7 @@ class Node(sim.Process):
     def run(self):
         
         while 1:
-            print self.id, self.battery_life, self.on, [a.id for a in self.targets], [a.id for a in self.neighbors]
+            print self.id, self.battery_life, self.on, [a.uv for a in self.targets], [a.id for a in self.neighbors]
             now = sim.now()
             if self.on:
                 yield sim.hold, self, self.battery_life

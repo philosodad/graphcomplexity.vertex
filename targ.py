@@ -1,6 +1,4 @@
-import SimPy.Simulation as sim
 import random as ran
-import scipy as sci
 from obal import G as G
 
 class Target(object):
@@ -8,5 +6,6 @@ class Target(object):
     def __init__(self):
         self.x = ran.random() * G.bound
         self.y = ran.random() * G.bound
+        self.uv = set([])
         self.id = Target.Next_id
         Target.Next_id += 1

@@ -10,6 +10,7 @@ import targ as tar
 import geom as geo
 import auto as aut
 import tast as tas
+import edst as eds
 from obal import G as G
 
 class NodeSource(object):
@@ -20,9 +21,9 @@ class NodeSource(object):
             n = nod.Node()
             sim.activate(n, n.run()) 
             self.nodes.append(n)
-        tas.populate_targets(self, targs)
-        tas.set_targets(self)
-        tas.set_neighborhood(self)
+        eds.populate_targets(self, targs)
+        eds.set_neighborhood(self)
+        eds.set_targets(self)
         for a in self.nodes:
             a.build_covers()
         for a in self.nodes:
