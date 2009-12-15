@@ -2,7 +2,9 @@
 #paul daigle
 #Class file that contains the main process (sensor nodes) and logic for the simulation
 
-import SimPy.SimulationTrace as sim
+#import SimPy.SimulationTrace as sim
+#import SimPy.Simulation as sim
+import SimPy.SimulationStep as sim
 import random as ran
 import scipy as sci
 import cove as cov
@@ -27,7 +29,6 @@ class Node(sim.Process):
         self.current_cover_index = 0
 
     def run(self):
-        
         while 1:
             print self.id, self.battery_life, self.on, [a.uv for a in self.targets], [a.id for a in self.neighbors]
             now = sim.now()
