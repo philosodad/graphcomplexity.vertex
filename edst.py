@@ -28,7 +28,8 @@ def set_targets(net):
     for i in net.nodes:
         for t in net.targets:
             if i.id in t.uv:
-                i.targets.append(t)
+                if t not in i.targets:
+                    i.targets.append(t)
             
             
                             
