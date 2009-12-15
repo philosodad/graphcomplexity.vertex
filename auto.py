@@ -51,6 +51,6 @@ def automata(n, sender):
         
         elif(len(set([keyed_neighbors[a].on for a in (scc.node_list - set([n.id]))])) > 1):
             n.current_cover_index = (n.current_cover_index + 1)%(len(n.covers))
-            n.current_cover = covers[n.current_cover_index]
+            n.current_cover = n.covers[n.current_cover_index]
         else:
             raise SystemError, "What the Hell?"
