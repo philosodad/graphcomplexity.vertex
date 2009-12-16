@@ -7,6 +7,7 @@ import SimPy.Simulation as sim
 #import SimPy.SimulationStep as sim
 import random as ran
 import scipy as sci
+import copy
 import cove as cov
 from obal import G as G
 import bild as bil
@@ -27,6 +28,15 @@ class Node(sim.Process):
         self.on = True
         self.current_cover = None
         self.current_cover_index = 0
+
+    def dup(self):
+        n = Node()
+        n.x = self.x
+        n.y = self.y
+        n.battery_life = self.battery_life
+        n.on = self.on
+        self.current_cover_index = 0
+        return n
 
     def run(self):
         while 1:
