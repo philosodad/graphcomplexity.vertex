@@ -5,6 +5,7 @@ import unittest
 import node
 import targ
 import netw
+import tast
 import cove as cov
 import auto as aut
 from obal import G as G
@@ -54,8 +55,8 @@ class NodeTestCase(unittest.TestCase):
         self.nodesource.targets.append(self.target_0)
         self.nodesource.targets.append(self.target_1)
         self.nodesource.targets.append(self.target_2)
-        self.nodesource.set_targets()
-        self.nodesource.set_neighborhood()
+        tast.set_targets(self.nodesource)
+        tast.set_neighborhood(self.nodesource)
 
     def tearDown(self):
         self.node_0 = None
@@ -90,7 +91,7 @@ class NodeTestCase(unittest.TestCase):
         self.node_2.build_covers()
         print [("%s: %s" %(a.node_list, a.degree)) for a in self.node_4.covers]
         
-        for x in set([4]), set ([0,5]), set([5,4]):
+        for x in [set([4]), set ([0,5]), set([5,4])]:
             assert x in [a.node_list for a in self.node_4.covers]
         assert not set([5]) in [a.node_list for a in self.node_4.covers]
         assert type(self.node_4.get_cover(set([0,5]))) == cov.Cover

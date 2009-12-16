@@ -18,8 +18,9 @@ class NodeSource(sim.Process):
     targets = []
     Next_id = 0
     def __init__(self):
-        sim.Process.__init__(self, name="node"+str(NodeSource.Next_id))
-
+        sim.Process.__init__(self, name="nodesource"+str(NodeSource.Next_id))
+        NodeSource.Next_id += 1
+        
     def generate(self, many, targs):
         for i in xrange(many):
             n = nod.Node()
