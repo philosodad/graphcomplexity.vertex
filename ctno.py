@@ -1,26 +1,25 @@
-#node.py
+#ctno.py
 #paul daigle
-#Class file that contains the main process (sensor nodes) and logic for the simulation
+#Class file that contains the cover 2 (sensor nodes) and logic for the simulation
 
 #import SimPy.SimulationTrace as sim
 import SimPy.Simulation as sim
 #import SimPy.SimulationStep as sim
 import random as ran
 import scipy as sci
-import ctno as ctn
 import copy
 import cove as cov
 from obal import G as G
 import bild as bil
 import auto as aut
 
-class Node(sim.Process):
+class T_Node(sim.Process):
     Next_id = 0
     def __init__(self):
-        sim.Process.__init__(self, name="node"+str(Node.Next_id))
-        self.id = Node.Next_id
+        sim.Process.__init__(self, name="t-node"+str(T_Node.Next_id))
+        self.id = T_Node.Next_id
         self.battery_life = ran.randint(100,150)
-        Node.Next_id += 1
+        T_Node.Next_id += 1
         self.x = ran.random() * G.bound
         self.y = ran.random() * G.bound
         self.targets = []
@@ -31,14 +30,7 @@ class Node(sim.Process):
         self.current_cover_index = 0
 
     def dup(self):
-        n = Node()
-        n.x = self.x
-        n.y = self.y
-        n.battery_life = self.battery_life
-        return n
-    
-    def make_ctn(self):
-        n = ctn.T_Node()
+        n = T_Node()
         n.x = self.x
         n.y = self.y
         n.battery_life = self.battery_life
