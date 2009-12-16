@@ -3,6 +3,7 @@ import unittest
 import netw
 import node
 import targ
+import tast
 import geom as geo
 from obal import G as G
 
@@ -67,14 +68,14 @@ class NodeSourceTestCase(unittest.TestCase):
         targ.Target.Next_id = 0
 
     def testSetTargets(self):
-        self.nodesource.set_targets()
+        tast.set_targets(self.nodesource)
         for a in [self.node_4, self.node_3]:
             assert self.target_2 in a.targets
         for a in [self.node_1, self.node_5]:
             assert self.target_3 in a.targets
 
     def testSetNeighborhood(self):
-        self.nodesource.set_neighborhood()
+        tast.set_neighborhood(self.nodesource)
         assert self.node_1 not in self.node_1.neighbors
         for a in [self.node_5, self.node_3, self.node_2]:
             assert a in self.node_1.neighbors
