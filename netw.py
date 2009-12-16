@@ -14,11 +14,13 @@ import edst as eds
 from obal import G as G
 
 class NodeSource(sim.Process):
-    nodes = []
-    targets = []
     Next_id = 0
     def __init__(self):
         sim.Process.__init__(self, name="nodesource"+str(NodeSource.Next_id))
+        self.id = NodeSource.Next_id
+        self.nodes = []
+        self.targets = []
+
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
@@ -34,3 +36,25 @@ class NodeSource(sim.Process):
         for a in self.nodes:
             for b in a.neighbors:
                 aut.automata(b, a.id)
+
+    def feed(self, other):
+        for i in self.nodes:
+            n = (i.dup())
+            sim.activate(n, n.run())
+            other.nodes.append(n)
+        eds.set_neighborhood(other)
+        eds.set_targets(other)
+        for a in other.nodes:
+            a.build_covers()
+        for a in other.nodes:
+            for b in a.neighbors:
+                aut.automata(b, a.id)
+        
+    def feed_nect(self, other):
+        for i in self.nodes:
+            n = (i.make_ctn())
+            sim.activate(n, n.run())
+            other.nodes.append(n)
+        eds.set_neighborhood(other)
+        eds.set_targets(other)
+        

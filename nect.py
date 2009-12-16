@@ -9,11 +9,11 @@ import tast as tas
 import edst as eds
 from obal import G as G
 
-class NodesTwo(sim.Process):
+class T_NodeSource(sim.Process):
     nodes = []
     targets = []
     Next_id = 0
     def __init__(self):
-        sim.Process.__init__(self, name="nodestwo"+str(NodesTwo.Next_id))
-        self.id = NodesTwo.Next_id
-        NodesTwo.Next_id += 1
+        sim.Process.__init__(self, name="nodestwo"+str(T_NodeSource.Next_id))
+        self.id = T_NodeSource.Next_id
+        T_NodeSource.Next_id += 1

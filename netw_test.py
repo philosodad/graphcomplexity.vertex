@@ -4,6 +4,7 @@ import netw
 import node
 import targ
 import tast
+import edst
 import geom as geo
 from obal import G as G
 
@@ -43,6 +44,7 @@ class NodeSourceTestCase(unittest.TestCase):
         self.node_5.battery_life = 140
         self.node_6.battery_life = 150
         self.nodesource = netw.NodeSource()
+        self.nodesourc2 = netw.NodeSource()
         self.nodesource.nodes.append(self.node_1)
         self.nodesource.nodes.append(self.node_2)
         self.nodesource.nodes.append(self.node_3)
@@ -64,6 +66,7 @@ class NodeSourceTestCase(unittest.TestCase):
         self.target_2 = None
         self.target_3 = None
         self.nodesource = None
+        self.nodesourc2 = None
         node.Node.Next_id = 0
         targ.Target.Next_id = 0
 
@@ -81,8 +84,25 @@ class NodeSourceTestCase(unittest.TestCase):
             assert a in self.node_1.neighbors
         for a in [self.node_1, self.node_2, self.node_4, self.node_5, self.node_6]:
             assert a in self.node_3.neighbors
-          
-            
+
+    def testFeed(self):
+        self.nodesource.targets = []
+        edst.set_neighborhood(self.nodesource)
+        edst.set_targets(self.nodesource)
+        self.nodesource.feed(self.nodesourc2)
+        print [("%s" %(a.uv)) for a in self.nodesource.targets]
+        print [("%s" %(b.uv)) for b in self.nodesourc2.targets]
+        assert self.nodesource.id != self.nodesourc2.id
+        assert len(self.nodesource.targets) > 0
+        assert len(self.nodesource.targets) == len(self.nodesourc2.targets)
+        for i in range(len(self.nodesource.targets)):
+            assert self.nodesource.targets[i] != self.nodesourc2.targets[i]
+        assert len(self.nodesource.nodes) > 0
+        assert len(self.nodesource.nodes) == len(self.nodesourc2.nodes)
+        for i in range(len(self.nodesource.nodes)):
+            assert self.nodesource.nodes[i].x == self.nodesourc2.nodes[i].x
+            assert self.nodesource.nodes[i].id != self.nodesourc2.nodes[i].id
+            assert len(self.nodesource.nodes[i].targets) == len(self.nodesourc2.nodes[i].targets)
 suite = unittest.makeSuite(NodeSourceTestCase, 'test')
 runner = unittest.TextTestRunner()
 runner.run(suite)
