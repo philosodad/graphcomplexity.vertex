@@ -11,7 +11,7 @@ import ctno as ctn
 import copy
 import cove as cov
 from obal import G as G
-import bild as bil
+import bedg as bil
 import auto as aut
 
 class Node(sim.Process):
