@@ -10,14 +10,9 @@ def automata(n, sender):
             return None
         n.update_covers()
         if n.covers[n.current_cover_index] != n.current_cover:
-            lower = False
-            for a in range(0,n.current_cover_index):
-                if n.covers[a] == n.current_cover:
-                    n.current_cover_index = a
-                    lower = True
-            if not lower:
-                n.current_cover = n.covers[0]
-                n.current_cover_index = 0
+            n.current_cover_index += 1
+            n.current_cover = n.covers[n.current_cover_index]
+            n.current_cover_index = 0
 
         scc = n.current_cover
         keyed_neighbors = {}
