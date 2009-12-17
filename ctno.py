@@ -11,7 +11,7 @@ import copy
 import cove as cov
 from obal import G as G
 import bild as bil
-import auto as aut
+import caut as cau
 
 class T_Node(sim.Process):
     Next_id = 0
@@ -25,7 +25,10 @@ class T_Node(sim.Process):
         self.targets = []
         self.neighbors = []
         self.covers = []
-        self.on = True
+        self.on = False
+        self.root = False
+        self.active = False
+        self.ex = 0
         self.current_cover = None
         self.current_cover_index = 0
 
@@ -53,30 +56,3 @@ class T_Node(sim.Process):
                 print ("node %s died at %d" % (self.id, sim.now()))
             else:
                 yield sim.passivate, self
-
-    def build_covers(self):
-        if len(self.targets) > 0:
-            bil.init_covers(self)
-            bil.update_degree(self)
-            bil.update_lifetime(self)
-            bil.update_on(self)
-            self.covers.sort()
-            self.current_cover_index = 0
-            self.current_cover = self.covers[0]
-        else:
-            self.on = False
-
-    def update_covers(self):
-        bil.update_degree(self)
-        bil.update_lifetime(self)
-        bil.update_on(self)
-        self.covers.sort()
-
-    def get_cover(self, x):
-        for a in self.covers:
-            if x == a.node_list:
-                return a
-        return None
-
-
-            
