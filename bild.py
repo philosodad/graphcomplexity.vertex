@@ -4,11 +4,6 @@
 
 import cove as cov
 
-def build_covers(self):
-    bil.init_covers(n)
-    bil.update_degree(n)
-    bil.update_lifetime(n)
-    bil.update_on(n)
 
 def init_covers(n):
     big_list = {}
@@ -70,7 +65,7 @@ def update_on(n):
     keyed_on[n.id] = n.on
     for a in n.neighbors:
         keyed_on[a.id] = a.on
-    #    print ("%s thinks %s.on is %s" %(n.id, a.id, keyed_on[a.id]))
+        #print ("%s thinks %s.on is %s" %(n.id, a.id, keyed_on[a.id]))
     for a in n.covers:
         a.on = 0
         for b in a.node_list:
