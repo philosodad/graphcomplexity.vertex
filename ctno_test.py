@@ -65,8 +65,15 @@ class T_NodeTestCase(unittest.TestCase):
 
     def testBasics(self):
         print [a.uv for a in self.nodesource.targets]
+        for a in self.nodesource.nodes:
+            print [b.uv for b in a.targets]
         assert len(self.nodesource.targets)==5
         assert len(self.nodesourc2.targets)==5
+        for a in self.nodesource.nodes:
+            a.build_covers
+        for a in self.nodesource.nodes:
+            for b in a.neighbors:
+                aut.automata(b, a.id)
         while self.nodesourc2.targets[0].covered == False:
             for n in self.nodesourc2.nodes:
                 print n.id
@@ -74,6 +81,7 @@ class T_NodeTestCase(unittest.TestCase):
         for n in self.nodesourc2.nodes:
             assert n.x != 0
         print [a.id for a in filter(lambda b: b.on, self.nodesourc2.nodes)]
+        print [a.id for a in filter(lambda b: b.on, self.nodesource.nodes)]
 
 suite = unittest.makeSuite(T_NodeTestCase, 'test')
 
