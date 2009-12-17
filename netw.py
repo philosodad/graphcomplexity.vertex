@@ -57,4 +57,4 @@ class NodeSource(sim.Process):
             other.nodes.append(n)
         eds.set_neighborhood(other)
         eds.set_targets(other)
-        
+        print "I'm a chicken"

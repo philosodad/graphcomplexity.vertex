@@ -21,9 +21,6 @@ class T_NodeTestCase(unittest.TestCase):
         self.node_3 = node.Node()
         self.node_4 = node.Node()
         self.node_5 = node.Node()
-        self.target_0 = targ.Target()
-        self.target_1 = targ.Target()
-        self.target_2 = targ.Target()
         self.node_0.x, self.node_0.y = 200, 375
         self.node_1.x, self.node_1.y = 375, 375
         self.node_2.x, self.node_2.y = 250, 250
@@ -65,14 +62,14 @@ class T_NodeTestCase(unittest.TestCase):
 
     def testBasics(self):
         print [a.uv for a in self.nodesource.targets]
-        for a in self.nodesource.nodes:
-            print [b.uv for b in a.targets]
         assert len(self.nodesource.targets)==5
         assert len(self.nodesourc2.targets)==5
         for a in self.nodesource.nodes:
-            a.build_covers
+            a.build_covers()
         for a in self.nodesource.nodes:
             for b in a.neighbors:
+                for c in b.covers:
+                    print c
                 aut.automata(b, a.id)
         while self.nodesourc2.targets[0].covered == False:
             for n in self.nodesourc2.nodes:
