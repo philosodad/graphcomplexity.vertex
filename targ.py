@@ -8,6 +8,9 @@ class Target(object):
         self.y = ran.random() * G.bound
         self.uv = set([])
         self.id = Target.Next_id
+        self.covered = False
+        self.active = False
+        self.star_edge = False
         Target.Next_id += 1
 
     def dup(self):

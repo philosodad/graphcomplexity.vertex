@@ -1,4 +1,4 @@
-#bild.py
+#bedg.py
 #j.paul daigle
 #This files constructs all of the cover sets, using the definition of a cover and a target found in targ.py and cove.py
 
@@ -6,38 +6,12 @@ import cove as cov
 
 
 def init_covers(n):
-    big_list = {}
-    big_list = big_list.fromkeys(n.targets)
-    for a in big_list:
-        big_list[a] = [n.id]
-        
+    n.covers.append(cov.Cover((set([n.id]))))
+    id_list = []
     for a in n.neighbors:
-        for b in big_list.keys():
-            if b in a.targets:
-                big_list[b].append(a.id)
-        
-    small_list = big_list.values()
-    slots = 1
-    for a in small_list:
-        slots = slots * len(a)
-    c = []
-    for i in range(slots):
-        c.append([])
-    b = 1
-    for i in range(len(small_list)):
-        g = 0
-        f = 0
-        while g < len(c):
-            for j in range(b):
-                c[g].append(small_list[i][f%len(small_list[i])])
-                g+=1
-            f+=1
-        b = b * len(small_list[i])
+        id_list.append(a.id)
+    n.covers.append(cov.Cover((set(id_list))))
             
-    for a in c:
-        if set(a) not in [b.node_list for b in n.covers]:
-            n.covers.append(cov.Cover(set(a)))
-
 def update_degree(n):
     for a in n.covers:
         a.degree = 0

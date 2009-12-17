@@ -4,3 +4,4 @@ class G(object):
     bound = 400
     sensor_range = 80
     comm_range = 160
+    big_constant = 1000000
