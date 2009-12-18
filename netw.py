@@ -9,6 +9,7 @@ import node as nod
 import targ as tar
 import geom as geo
 import auto as aut
+import caut as cau
 import tast as tas
 import edst as eds
 from obal import G as G
@@ -20,12 +21,12 @@ class NodeSource(sim.Process):
         self.id = NodeSource.Next_id
         self.nodes = []
         self.targets = []
-
+        self.source_out = open("source.dat", 'w')
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
         for i in xrange(many):
-            n = nod.Node()
+            n = nod.Node(self)
             sim.activate(n, n.run()) 
             self.nodes.append(n)
         eds.populate_targets(self, targs)
@@ -52,9 +53,15 @@ class NodeSource(sim.Process):
         
     def feed_nect(self, other):
         for i in self.nodes:
-            n = (i.make_ctn())
+            n = (i.make_ctn(other))
             sim.activate(n, n.run())
             other.nodes.append(n)
         eds.set_neighborhood(other)
         eds.set_targets(other)
-        print "I'm a chicken"
+        for a in other.nodes:
+            cau.t_algorithm(a)
+
+    def output(self, time):
+        x = len(self.targets)
+        y = len(filter(lambda a: a.covered, self.targets))
+        self.source_out.writelines("%d: %d targets, %d covered\n" %(time,x,y))

@@ -10,7 +10,7 @@ def automata(n, sender):
             return None
         n.update_covers()
         if n.covers[n.current_cover_index] != n.current_cover:
-            n.current_cover_index += 1
+            n.current_cover_index = (n.current_cover + 1)%len(n.covers)
             n.current_cover = n.covers[n.current_cover_index]
             n.current_cover_index = 0
 
@@ -22,10 +22,10 @@ def automata(n, sender):
             return None #keep current cover
 
         #if s is not in current cover and everything else in the cover is on or everything is off
-        elif (n.id not in scc.node_list and (len(set([keyed_neighbors[a].on for a in scc.node_list])) < 2)):
+        elif (n.id not in scc.node_list and (set([keyed_neighbors[a].on for a in scc.node_list]) - set([True]) == set([]))):
             if n.on:
                 n.on = False
-                scc.covered = False
+                scc.covered = True
                 n.update_covers()
                 for a in n.neighbors:
                  #   print("%s calling %s.noto" %(n.id, a.id))
@@ -50,4 +50,4 @@ def automata(n, sender):
             n.current_cover_index = (n.current_cover_index + 1)%(len(n.covers))
             n.current_cover = n.covers[n.current_cover_index]
         else:
-            raise SystemError, "What the Hell?"
+            return None

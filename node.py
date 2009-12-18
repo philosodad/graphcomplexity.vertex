@@ -16,7 +16,7 @@ import auto as aut
 
 class Node(sim.Process):
     Next_id = 0
-    def __init__(self):
+    def __init__(self, parent):
         sim.Process.__init__(self, name="node"+str(Node.Next_id))
         self.id = Node.Next_id
         self.battery_life = ran.randint(100,150)
@@ -29,6 +29,7 @@ class Node(sim.Process):
         self.on = True
         self.current_cover = None
         self.current_cover_index = 0
+        self.parent = parent
 
     def dup(self):
         n = Node()
@@ -37,8 +38,8 @@ class Node(sim.Process):
         n.battery_life = self.battery_life
         return n
     
-    def make_ctn(self):
-        n = ctn.T_Node()
+    def make_ctn(self, parent):
+        n = ctn.T_Node(parent)
         n.x = self.x
         n.y = self.y
         n.battery_life = self.battery_life
@@ -46,19 +47,28 @@ class Node(sim.Process):
 
     def run(self):
         while 1:
-            print self.id, self.battery_life, self.on, [a.node_list for a in self.covers], [a.uv for a in self.targets], [a.id for a in self.neighbors]
+            print "node: ", self.id, self.battery_life, self.on, [a.node_list for a in self.covers], [a.uv for a in self.targets], [a.id for a in self.neighbors]
             now = sim.now()
             if self.on:
+                for a in self.targets:
+                    a.covered = True
                 yield sim.hold, self, self.battery_life
+                self.parent.output(sim.now())
                 self.battery_life = 0
                 self.on = False
+                for a in self.targets:
+                    keyed_on = {}
+                    for b in self.neighbors:
+                        keyed_on[b.id] = b.on
+                    if keyed_on[(a.uv - set([self.id])).pop()] == False:
+                        a.covered = False
                 for a in self.neighbors:
                     if not a.on:
                         a.update_covers
                         aut.automata(a, self.id)
                         if a.on:
                             sim.reactivate(a)
-                print ("node %s died at %d" % (self.id, sim.now()))
+    #            print ("node %s died at %d" % (self.id, sim.now()))
             else:
                 yield sim.passivate, self
 
