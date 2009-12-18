@@ -4,13 +4,14 @@
 
 def automata(n, sender):
     while 1:
+        n.update_covers()
         if not n.current_cover:
             return None
-        if n.battery_life == 0:
+        print [a for a in n.covers]
+        if len(n.covers) == 0:
             return None
-        n.update_covers()
         if n.covers[n.current_cover_index] != n.current_cover:
-            n.current_cover_index = (n.current_cover + 1)%len(n.covers)
+            n.current_cover_index = (n.current_cover_index + 1)%len(n.covers)
             n.current_cover = n.covers[n.current_cover_index]
             n.current_cover_index = 0
 
