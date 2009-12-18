@@ -14,10 +14,9 @@ from obal import G as G
 import bedg as bil
 import auto as aut
 
-class Node(sim.Process):
+class Node(object):
     Next_id = 0
     def __init__(self, parent):
-        sim.Process.__init__(self, name="node"+str(Node.Next_id))
         self.id = Node.Next_id
         self.battery_life = ran.randint(100,150)
         Node.Next_id += 1
@@ -52,33 +51,6 @@ class Node(sim.Process):
         n.y = self.y
         n.battery_life = self.battery_life
         return n
-
-    def run(self):
-        while 1:
-            print "node: ", self.id, self.battery_life, self.on, [a.node_list for a in self.covers], [a.uv for a in self.targets], [a.id for a in self.neighbors]
-            now = sim.now()
-            if self.on:
-                for a in self.targets:
-                    a.covered = True
-                yield sim.hold, self, self.battery_life
-                self.parent.output(sim.now())
-                self.battery_life = 0
-                self.on = False
-                for a in self.targets:
-                    keyed_on = {}
-                    for b in self.neighbors:
-                        keyed_on[b.id] = b.on
-                    if keyed_on[(a.uv - set([self.id])).pop()] == False:
-                        a.covered = False
-                for a in self.neighbors:
-                    if not a.on:
-                        a.update_covers
-                        aut.automata(a, self.id)
-                        if a.on:
-                            sim.reactivate(a)
-    #            print ("node %s died at %d" % (self.id, sim.now()))
-            else:
-                yield sim.passivate, self
 
     def build_covers(self):
         if len(self.targets) > 0:

@@ -4,6 +4,7 @@ from obal import G as G
 big = G.big_constant
 
 def t_algorithm(n):
+#    print ("node %s is off" %(n.id))
     if not n.targets:
         return None
     if len(set([a.covered for a in n.targets])) == 1 and n.targets[0].covered == True:
@@ -52,11 +53,17 @@ def step(v,w):
     beta = min([(1-v.ex)*(big-v.battery_life), (1-w.ex)*(big-w.battery_life)])
     v.ex = v.ex + (beta/float(big-v.battery_life))
     w.ex = w.ex + (beta/float(big-w.battery_life))
-    if v.ex == 1:
+    if v.ex == 1 and v.battery_life > 0:
         v.on = True
         for a in v.targets:
             a.covered = True
-    if w.ex == 1:
+    elif v.battery_life <= 0:
+        v.on = False
+        v.ex = 0
+    if w.ex == 1 and w.battery_life > 0:
         w.on = True
         for a in w.targets:
             a.covered = True
+    elif w.battery_life <= 0:
+        w.on = False
+        w.ex = 0
