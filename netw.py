@@ -33,13 +33,15 @@ class NodeSource(object):
     def go(self):
         time = 0
         for a in self.nodes:
+            print "node: ", a.id, a.battery_life, a.on, [b.node_list for b in a.covers], [b.uv for b in a.targets], [b.id for b in a.neighbors]
+        for a in self.nodes:
             for b in a.neighbors:
                 aut.automata(a, b.id)
         while(self.targets_covered()):
             self.nodes.sort()
             current_node = filter(lambda a: a.on, self.nodes)[0]
             time = time + current_node.battery_life
-            print "time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
+            print "a_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
             current_node.on = False
             for a in filter(lambda a: a.on, self.nodes):
                 a.battery_life = a.battery_life - current_node.battery_life
@@ -66,8 +68,6 @@ class NodeSource(object):
             other.nodes.append(n)
         eds.set_neighborhood(other)
         eds.set_targets(other)
-        for a in other.nodes:
-            cau.t_algorithm(a)
 
     def output(self, time):
         x = len(self.targets)

@@ -7,10 +7,9 @@ def automata(n, sender):
         n.update_covers()
         if not n.current_cover:
             return None
-        print [a for a in n.covers]
         if len(n.covers) == 0:
             return None
-        if n.covers[n.current_cover_index] != n.current_cover:
+        if n.covers[n.current_cover_index%len(n.covers)] != n.current_cover:
             n.current_cover_index = (n.current_cover_index + 1)%len(n.covers)
             n.current_cover = n.covers[n.current_cover_index]
             n.current_cover_index = 0
