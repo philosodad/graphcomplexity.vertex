@@ -13,8 +13,9 @@ def t_algorithm(n):
         keyed_neighbors[a.id] = a
     keyed_targets = {}
     for a in n.targets:
-        x = (a.uv - set([n.id])).pop()
-        keyed_targets[x] = a
+        if (a.uv - set([n.id])) != set([]):
+            x = (a.uv - set([n.id])).pop()
+            keyed_targets[x] = a
     if ran.randint(0,1) == 0:
         n.root = True
     else:

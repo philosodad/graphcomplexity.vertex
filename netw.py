@@ -1,10 +1,7 @@
 #netw.py
 #j.paul daigle
 #generation and data structure for the network as a whole. 
-
-import SimPy.Simulation as sim
 import random as ran
-import scipy as sci
 import node as nod
 import targ as tar
 import geom as geo
@@ -14,10 +11,9 @@ import tast as tas
 import edst as eds
 from obal import G as G
 
-class NodeSource(sim.Process):
+class NodeSource(object):
     Next_id = 0
     def __init__(self):
-        sim.Process.__init__(self, name="nodesource"+str(NodeSource.Next_id))
         self.id = NodeSource.Next_id
         self.nodes = []
         self.targets = []
@@ -27,21 +23,34 @@ class NodeSource(sim.Process):
     def generate(self, many, targs):
         for i in xrange(many):
             n = nod.Node(self)
-            sim.activate(n, n.run()) 
             self.nodes.append(n)
         eds.populate_targets(self, targs)
         eds.set_neighborhood(self)
         eds.set_targets(self)
         for a in self.nodes:
             a.build_covers()
+
+    def go(self):
+        time = 0
         for a in self.nodes:
             for b in a.neighbors:
-                aut.automata(b, a.id)
-
+                aut.automata(a, b.id)
+        while(self.targets_covered()):
+            self.nodes.sort()
+            current_node = filter(lambda a: a.on, self.nodes)[0]
+            time = time + current_node.battery_life
+            print "time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
+            current_node.on = False
+            for a in filter(lambda a: a.on, self.nodes):
+                a.battery_life = a.battery_life - current_node.battery_life
+            current_node.battery_life = 0
+            for a in current_node.neighbors:
+                aut.automata(a, current_node.id)
+                
+            
     def feed(self, other):
         for i in self.nodes:
-            n = (i.dup())
-            sim.activate(n, n.run())
+            n = (i.dup(other))
             other.nodes.append(n)
         eds.set_neighborhood(other)
         eds.set_targets(other)
@@ -54,7 +63,6 @@ class NodeSource(sim.Process):
     def feed_nect(self, other):
         for i in self.nodes:
             n = (i.make_ctn(other))
-            sim.activate(n, n.run())
             other.nodes.append(n)
         eds.set_neighborhood(other)
         eds.set_targets(other)
@@ -65,3 +73,10 @@ class NodeSource(sim.Process):
         x = len(self.targets)
         y = len(filter(lambda a: a.covered, self.targets))
         self.source_out.writelines("%d: %d targets, %d covered\n" %(time,x,y))
+
+    def targets_covered(self):
+        on_list = set([b.id for b in filter(lambda a: a.on, self.nodes)])
+        for a in self.targets:
+            if len(a.uv - on_list) == 2:
+                return False
+        return True

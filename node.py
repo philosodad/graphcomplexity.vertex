@@ -31,8 +31,16 @@ class Node(sim.Process):
         self.current_cover_index = 0
         self.parent = parent
 
-    def dup(self):
-        n = Node()
+    def __cmp__(self, other):
+        if self.battery_life < other.battery_life:
+            return -1
+        elif self.battery_life > other.battery_life:
+            return 1
+        else:
+            return 0
+
+    def dup(self, parent):
+        n = Node(parent)
         n.x = self.x
         n.y = self.y
         n.battery_life = self.battery_life
@@ -85,6 +93,10 @@ class Node(sim.Process):
             self.on = False
 
     def update_covers(self):
+        for a in filter(lambda a: a.battery_life == 0, self.neighbors):
+            self.covers = filter(lambda b: a.id not in b.node_list, self.covers)
+        if self.battery_life == 0:
+            self.covers = filter(lambda b: self.id not in b.node_list, self.covers)
         bil.update_degree(self)
         bil.update_lifetime(self)
         bil.update_on(self)

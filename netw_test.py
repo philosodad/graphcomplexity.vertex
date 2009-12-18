@@ -1,108 +1,86 @@
 import sys
+#sys.path.append('/Users/paul/dev/schoolRelated/graphcomplexity/edge/lib')
 import unittest
-import netw
+#import node
 import node
+import ctno
 import targ
-import tast
+import netw
+import nect
 import edst
-import geom as geo
+import caut as cau
+import cove as cov
+import auto as aut
 from obal import G as G
 
-class NodeSourceTestCase(unittest.TestCase):
+class NetwTestCase(unittest.TestCase):
     def setUp(self):
-        self.node_1 = node.Node()
-        self.node_2 = node.Node()
-        self.node_3 = node.Node()
-        self.node_4 = node.Node()
-        self.node_5 = node.Node()
-        self.node_6 = node.Node()
-        self.target_1 = targ.Target()
-        self.target_2 = targ.Target()
-        self.target_3 = targ.Target()
-        self.node_1.x = 200
-        self.node_1.y = 400
-        self.node_2.x = 350
-        self.node_2.y = 350
-        self.node_3.x = 250
-        self.node_3.y = 250
-        self.node_4.x = 150
-        self.node_4.y = 150
-        self.node_5.x = 325
-        self.node_5.y = 375
-        self.node_6.x = 350
-        self.node_6.y = 250
-        self.target_1.x = 300
-        self.target_1.y = 300
-        self.target_2.x = 200
-        self.target_2.y = 200
-        self.target_3.x = 250
-        self.target_3.y = 350
-        self.node_1.battery_life = 100
-        self.node_2.battery_life = 110
-        self.node_3.battery_life = 120
-        self.node_4.battery_life = 130
-        self.node_5.battery_life = 140
-        self.node_6.battery_life = 150
         self.nodesource = netw.NodeSource()
-        self.nodesourc2 = netw.NodeSource()
+        self.node_0 = node.Node(self.nodesource)
+        self.node_1 = node.Node(self.nodesource)
+        self.node_2 = node.Node(self.nodesource)
+        self.node_3 = node.Node(self.nodesource)
+        self.node_4 = node.Node(self.nodesource)
+        self.node_5 = node.Node(self.nodesource)
+        self.node_0.x, self.node_0.y = 200, 375
+        self.node_1.x, self.node_1.y = 375, 375
+        self.node_2.x, self.node_2.y = 250, 250
+        self.node_3.x, self.node_3.y = 150, 150
+        self.node_4.x, self.node_4.y = 375, 300
+        self.node_5.x, self.node_5.y = 375, 150
+        self.node_0.battery_life = 100
+        self.node_1.battery_life = 110
+        self.node_2.battery_life = 80
+        self.node_3.battery_life = 130
+        self.node_4.battery_life = 120
+        self.node_5.battery_life = 110
+        self.nodesource.nodes.append(self.node_0)
         self.nodesource.nodes.append(self.node_1)
         self.nodesource.nodes.append(self.node_2)
         self.nodesource.nodes.append(self.node_3)
         self.nodesource.nodes.append(self.node_4)
         self.nodesource.nodes.append(self.node_5)
-        self.nodesource.nodes.append(self.node_6)
-        self.nodesource.targets.append(self.target_1)
-        self.nodesource.targets.append(self.target_2)
-        self.nodesource.targets.append(self.target_3)
+        edst.set_neighborhood(self.nodesource)
+        edst.set_targets(self.nodesource)
+        self.nodesourc2 = nect.T_NodeSource()
+       # self.nodesource.feed_nect(self.nodesourc2)
 
     def tearDown(self):
+        self.node_0 = None
         self.node_1 = None
         self.node_2 = None
         self.node_3 = None
         self.node_4 = None
         self.node_5 = None
-        self.node_6 = None
-        self.target_1 = None
-        self.target_2 = None
-        self.target_3 = None
         self.nodesource = None
+        for n in self.nodesourc2.nodes:
+            n = None
+        for n in self.nodesourc2.targets:
+            n = None
         self.nodesourc2 = None
         node.Node.Next_id = 0
         targ.Target.Next_id = 0
-
-    def testSetTargets(self):
-        tast.set_targets(self.nodesource)
-        for a in [self.node_4, self.node_3]:
-            assert self.target_2 in a.targets
-        for a in [self.node_1, self.node_5]:
-            assert self.target_3 in a.targets
+        ctno.T_Node.Next_id = 0
 
     def testSetNeighborhood(self):
-        tast.set_neighborhood(self.nodesource)
         assert self.node_1 not in self.node_1.neighbors
-        for a in [self.node_5, self.node_3, self.node_2]:
-            assert a in self.node_1.neighbors
-        for a in [self.node_1, self.node_2, self.node_4, self.node_5, self.node_6]:
-            assert a in self.node_3.neighbors
+        for a in [self.node_5, self.node_3, self.node_2, self.node_1]:
+            assert a not in self.node_1.neighbors
+        for a in [self.node_2, self.node_1, self.node_5]:
+            assert a in self.node_4.neighbors
 
-    def testFeed(self):
-        self.nodesource.targets = []
-        edst.set_neighborhood(self.nodesource)
-        edst.set_targets(self.nodesource)
-        self.nodesource.feed(self.nodesourc2)
-        print [("%s" %(a.uv)) for a in self.nodesource.targets]
-        print [("%s" %(b.uv)) for b in self.nodesourc2.targets]
-        assert self.nodesource.id != self.nodesourc2.id
-        assert len(self.nodesource.targets) > 0
-        assert len(self.nodesource.targets) == len(self.nodesourc2.targets)
-        for i in range(len(self.nodesource.targets)):
-            assert self.nodesource.targets[i] != self.nodesourc2.targets[i]
-        assert len(self.nodesource.nodes) > 0
-        assert len(self.nodesource.nodes) == len(self.nodesourc2.nodes)
-        for i in range(len(self.nodesource.nodes)):
-            assert self.nodesource.nodes[i].x == self.nodesourc2.nodes[i].x
-            assert self.nodesource.nodes[i].id != self.nodesourc2.nodes[i].id
-            assert len(self.nodesource.nodes[i].targets) == len(self.nodesourc2.nodes[i].targets)
-suite = unittest.makeSuite(NodeSourceTestCase, 'test')
+    def test_targetsCovered(self):
+        assert self.nodesource.targets_covered()
+        assert self.node_2.on
+        self.node_2.on = False
+        self.node_3.on = False
+        assert not self.nodesource.targets_covered()
+
+    def test_go(self):
+        for a in self.nodesource.nodes:
+            a.build_covers()
+        self.nodesource.go()
+
+suite = unittest.makeSuite(NetwTestCase, 'test')
 runner = unittest.TextTestRunner()
 runner.run(suite)
