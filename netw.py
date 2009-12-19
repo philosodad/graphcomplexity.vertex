@@ -13,11 +13,11 @@ from obal import G as G
 
 class NodeSource(object):
     Next_id = 0
-    def __init__(self):
+    def __init__(self, fi):
         self.id = NodeSource.Next_id
         self.nodes = []
         self.targets = []
-        self.source_out = open("source.dat", 'w')
+        self.source_out = fi
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
@@ -32,22 +32,25 @@ class NodeSource(object):
 
     def go(self):
         time = 0
-        for a in self.nodes:
-            print "node: ", a.id, a.battery_life, a.on, [b.node_list for b in a.covers], [b.uv for b in a.targets], [b.id for b in a.neighbors]
+#        for a in self.nodes:
+#            print "node: ", a.id, a.battery_life, a.on, [b.node_list for b in a.covers], [b.uv for b in a.targets], [b.id for b in a.neighbors]
         for a in self.nodes:
             for b in a.neighbors:
                 aut.automata(a, b.id)
-        while(self.targets_covered()):
-            self.nodes.sort()
-            current_node = filter(lambda a: a.on, self.nodes)[0]
-            time = time + current_node.battery_life
-            print "a_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
-            current_node.on = False
-            for a in filter(lambda a: a.on, self.nodes):
-                a.battery_life = a.battery_life - current_node.battery_life
-            current_node.battery_life = 0
-            for a in current_node.neighbors:
-                aut.automata(a, current_node.id)
+        first = len( filter(lambda a: a.on, self.nodes))
+        if self.targets:
+            while(self.targets_covered()):
+                self.nodes.sort()
+                current_node = filter(lambda a: a.on, self.nodes)[0]
+                time = time + current_node.battery_life
+    #            print "a_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
+                current_node.on = False
+                for a in filter(lambda a: a.on, self.nodes):
+                    a.battery_life = a.battery_life - current_node.battery_life
+                current_node.battery_life = 0
+                for a in current_node.neighbors:
+                    aut.automata(a, current_node.id)
+            self.source_out.writelines("%d\t %d\n" %(first,time))
                 
             
     def feed(self, other):
@@ -76,6 +79,8 @@ class NodeSource(object):
 
     def targets_covered(self):
         on_list = set([b.id for b in filter(lambda a: a.on, self.nodes)])
+        if len(on_list) == 0:
+            return False
         for a in self.targets:
             if len(a.uv - on_list) == 2:
                 return False
