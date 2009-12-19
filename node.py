@@ -18,7 +18,7 @@ class Node(object):
     Next_id = 0
     def __init__(self, parent):
         self.id = Node.Next_id
-        self.battery_life = ran.randint(100,150)
+        self.battery_life = ran.randint(140,150)
         Node.Next_id += 1
         self.x = ran.random() * G.bound
         self.y = ran.random() * G.bound

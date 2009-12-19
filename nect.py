@@ -12,30 +12,33 @@ from obal import G as G
 
 class T_NodeSource(object):
     Next_id = 0
-    def __init__(self):
+    def __init__(self, fi):
         self.nodes = []
         self.targets = []
         self.id = T_NodeSource.Next_id
         T_NodeSource.Next_id += 1
-        self.t_source_out = open("t_source.dat", 'w')
+        self.t_source_out = fi
         
 
     def go(self):
         time = 0
-        x = 0
+        first = 0
         while self.targets_coverable():
             self.set_targets()
+            if first == 0:
+                first = len(filter(lambda a: a.on, self.nodes))
             self.nodes.sort()
             current_node = filter(lambda a: a.on, self.nodes)[0]
             time = time + current_node.battery_life
-            print "t_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
+#            print "t_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
             current_node.on = False
             for a in filter(lambda a: a.on, self.nodes):
-                print ("node %s battery life %d" %(a.id, a.battery_life))
+#                print ("node %s battery life %d" %(a.id, a.battery_life))
                 a.battery_life = a.battery_life - current_node.battery_life
-                print ("node %s battery life %d" %(a.id, a.battery_life))
-#                a.battery_life = 0
+ #               print ("node %s battery life %d" %(a.id, a.battery_life))
             current_node.battery_life = 0
+        self.t_source_out.writelines("%d\t %d\n" %(first,time))
+
             
 
     def output(self, time):
@@ -45,6 +48,8 @@ class T_NodeSource(object):
 
     def targets_covered(self):
         on_list = set([b.id for b in filter(lambda a: a.on, self.nodes)])
+        if len(on_list) == 0:
+            return False
         for a in self.targets:
             if len(a.uv - on_list) == 2:
                 return False
@@ -52,6 +57,10 @@ class T_NodeSource(object):
 
     def targets_coverable(self):
         live_list = set([b.id for b in filter(lambda a: a.battery_life > 0, self.nodes)])
+        if len(live_list) == 0:
+            return False
+        if len(self.targets) == 0:
+            return False
         for a in self.targets:
             if len(a.uv - live_list) == 2:
                 return False
