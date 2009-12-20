@@ -13,11 +13,10 @@ from obal import G as G
 
 class NodeSource(object):
     Next_id = 0
-    def __init__(self, fi):
+    def __init__(self):
         self.id = NodeSource.Next_id
         self.nodes = []
         self.targets = []
-        self.source_out = fi
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
@@ -50,7 +49,7 @@ class NodeSource(object):
                 current_node.battery_life = 0
                 for a in current_node.neighbors:
                     aut.automata(a, current_node.id)
-            self.source_out.writelines("%d\t %d\n" %(first,time))
+        return first, time
                 
             
     def feed(self, other):
@@ -79,6 +78,8 @@ class NodeSource(object):
 
     def targets_covered(self):
         on_list = set([b.id for b in filter(lambda a: a.on, self.nodes)])
+        if len(self.targets) == 0:
+            return False
         if len(on_list) == 0:
             return False
         for a in self.targets:
