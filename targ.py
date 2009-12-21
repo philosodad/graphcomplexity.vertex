@@ -11,6 +11,7 @@ class Target(object):
         self.covered = False
         self.active = False
         self.star_edge = False
+        self.keyed_uv = {}
         Target.Next_id += 1
 
     def dup(self):

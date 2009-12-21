@@ -9,6 +9,7 @@ import auto as aut
 import caut as cau
 import tast as tas
 import edst as eds
+import sequ as seq
 from obal import G as G
 
 class NodeSource(object):
@@ -17,6 +18,8 @@ class NodeSource(object):
         self.id = NodeSource.Next_id
         self.nodes = []
         self.targets = []
+        self.keyed_nodes = {}
+        self.approx = 0
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
@@ -26,6 +29,11 @@ class NodeSource(object):
         eds.populate_targets(self, targs)
         eds.set_neighborhood(self)
         eds.set_targets(self)
+        self.approx = seq.sequential(self)
+        for a in self.targets:
+            a.keyed_uv[a.id] = a.uv
+        for a in self.nodes:
+            self.keyed_nodes[a.id] = a
         for a in self.nodes:
             a.build_covers()
 
