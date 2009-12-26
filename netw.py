@@ -94,3 +94,10 @@ class NodeSource(object):
             if len(a.uv - on_list) == 2:
                 return False
         return True
+
+    def get_degree(self):
+        degree = 0
+        for a in self.nodes:
+            degree = degree + len(a.neighbors)
+        return degree/len(self.nodes)
+            
