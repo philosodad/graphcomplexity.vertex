@@ -28,7 +28,7 @@ def main():
     fresult_out = open("f_data.dat", 'w')
     sresult_out = open('s_data.dat', 'w')
     for i in range(i):
-        fsize, flife, csize, clife, ssize = 0,0,0,0,0
+        fsize, flife, csize, clife, ssize, degre = 0,0,0,0,0,0
         fsizes, ssizes = [], []
         count = 0
         for j in range(r):
@@ -44,6 +44,7 @@ def main():
                 csizt, clift = 5, 5
                 fsizes.append(fsizt)
                 ssizes.append(ssizt)
+                degrt = net.get_degree()
             if csizt != 0:
                 fsize += fsizt
                 flife += flift
@@ -51,16 +52,20 @@ def main():
                 clife += clift
                 ssize += ssizt
                 count += 1
+                degre += degrt
         fsiza = fsize / float(count)
         flifa = flife / float(count)
         csiza = csize / float(count)
         clifa = clife / float(count)
         ssiza = ssize / float(count)
-        fsmod = mod_dif(fsizes, ssizes)
-        fsmax = max_dif(fsizes, ssizes)
-        fresult_out.write(("%d\t%d\t%d\n" %(b+b*i, fsiza, flifa)))
-        cresult_out.write(("%d\t%d\t%d\n" %(b+b*i, csiza, clifa)))
-        sresult_out.write(("%d\t%d\t%d\t%d\n" %((b+b*i), fsiza, fsmod, fsmax)))
+        degra = degre / float(count)
+        if framework_only:
+            fsmod = mod_dif(fsizes, ssizes)
+            fsmax = max_dif(fsizes, ssizes)
+        fresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*i, degra, fsiza, flifa)))
+        cresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*i, degra, csiza, clifa)))
+        if framework_only:
+            sresult_out.write(("%d\t%d\t%d\t%d\t%d\n" %((b+b*i), degra, ssiza, fsmod, fsmax)))
 
 def mod_dif(f,s):
     diff = map(lambda x,y: x-y, f,s)
