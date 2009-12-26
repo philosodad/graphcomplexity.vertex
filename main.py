@@ -6,13 +6,15 @@ from obal import G as G
 
 def main():
     try:
-        opts, atgs = getopt.getopt(sys.argv[1:], "fi:r:b:a:", ["iterations=", "runs=", "base=", "area="])
+        opts, atgs = getopt.getopt(sys.argv[1:], "fi:r:b:a:d:", ["iterations=", "runs=", "base=", "area=", "density="])
     except getopt.GetoptError:
         sys.exit(2)
     framework_only = False
+    density_variation = None
     i=4
     b=5
     r=20
+    d=2
     for o,a in opts:
         if o in ('-f'):
             framework_only = True
@@ -24,17 +26,25 @@ def main():
             b=int(a)
         if o in ('-a','--area'):
             G.bounds = int(a)
+        if o in ('-d','--density'):
+            density_variation = True
+            d = int(a)
     cresult_out = open("c_data.dat", 'w')
     fresult_out = open("f_data.dat", 'w')
     sresult_out = open('s_data.dat', 'w')
-    for i in range(i):
+    for a in range(i):
         fsize, flife, csize, clife, ssize, degre = 0,0,0,0,0,0
         fsizes, ssizes = [], []
         count = 0
         for j in range(r):
             net = netw.NodeSource()
             ne2 = nect.T_NodeSource()
-            net.generate(b+b*i, 5)
+            if not density_variation:
+                net.generate(b+b*a, density_variation)
+            else:
+                print "i = ", i
+                print "b = ", b
+                net.generate(b*i, d+d*a)
             ssizt = net.approx
             net.feed_nect(ne2)
             fsizt, flift = net.go()
@@ -62,10 +72,10 @@ def main():
         if framework_only:
             fsmod = mod_dif(fsizes, ssizes)
             fsmax = max_dif(fsizes, ssizes)
-        fresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*i, degra, fsiza, flifa)))
-        cresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*i, degra, csiza, clifa)))
+        fresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*a, degra, fsiza, flifa)))
+        cresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*a, degra, csiza, clifa)))
         if framework_only:
-            sresult_out.write(("%d\t%d\t%d\t%d\t%d\n" %((b+b*i), degra, ssiza, fsmod, fsmax)))
+            sresult_out.write(("%d\t%d\t%d\t%d\t%d\n" %((b+b*a), degra, ssiza, fsmod, fsmax)))
 
 def mod_dif(f,s):
     diff = map(lambda x,y: x-y, f,s)
