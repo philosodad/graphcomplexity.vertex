@@ -43,11 +43,12 @@ def set_neighborhood(net, targs):
                 
 
 def set_targets(net):
+    print "let's set our targets"
     for i in net.nodes:
         for t in net.targets:
             if i.id in t.uv:
                 if t not in i.targets:
                     i.targets.append(t)
-            
+    print "I'm done setting targets"
             
                             

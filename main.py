@@ -44,7 +44,7 @@ def main():
             else:
                 print "i = ", i
                 print "b = ", b
-                net.generate(b*i, d+d*a)
+                net.generate(b*i, int(d*b*i*.5) + (int(b*a*.5))*((b*a)-1))
             ssizt = net.approx
             net.feed_nect(ne2)
             fsizt, flift = net.go()
@@ -69,13 +69,14 @@ def main():
         clifa = clife / float(count)
         ssiza = ssize / float(count)
         degra = degre / float(count)
+        nsize = len(net.nodes)
         if framework_only:
             fsmod = mod_dif(fsizes, ssizes)
             fsmax = max_dif(fsizes, ssizes)
-        fresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*a, degra, fsiza, flifa)))
-        cresult_out.write(("%d\t%d\t%d\t%d\n" %(b+b*a, degra, csiza, clifa)))
+        fresult_out.write(("%d\t%d\t%d\t%d\n" %(nsize, degra, fsiza, flifa)))
+        cresult_out.write(("%d\t%d\t%d\t%d\n" %(nsize, degra, csiza, clifa)))
         if framework_only:
-            sresult_out.write(("%d\t%d\t%d\t%d\t%d\n" %((b+b*a), degra, ssiza, fsmod, fsmax)))
+            sresult_out.write(("%d\t%d\t%d\t%d\t%d\n" %(nsize, degra, ssiza, fsmod, fsmax)))
 
 def mod_dif(f,s):
     diff = map(lambda x,y: x-y, f,s)
