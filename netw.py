@@ -10,6 +10,7 @@ import caut as cau
 import tast as tas
 import edst as eds
 import sequ as seq
+import dens as den
 from obal import G as G
 
 class NodeSource(object):
@@ -23,12 +24,22 @@ class NodeSource(object):
         NodeSource.Next_id += 1
         
     def generate(self, many, targs):
+        print "let's add ", many
         for i in xrange(many):
             n = nod.Node(self)
             self.nodes.append(n)
-        eds.populate_targets(self, targs)
-        eds.set_neighborhood(self)
-        eds.set_targets(self)
+        if not targs:
+            eds.populate_targets(self, targs)
+            eds.set_neighborhood(self)
+            eds.set_targets(self)
+        else:
+            print "targs is equal to ", targs
+            print ("there are %d nodes" %(len(self.nodes)))
+            if targs > (len(self.nodes)*.5)*(len(self.nodes)-1):
+                targs = (len(self.nodes)*.5)*(len(self.nodes)-1)
+                print "but now targs is equal to ", targs
+            den.set_neighborhood(self, targs)
+            den.set_targets(self)
         self.approx = seq.sequential(self)
         for a in self.targets:
             a.keyed_uv[a.id] = a.uv
@@ -36,6 +47,37 @@ class NodeSource(object):
             self.keyed_nodes[a.id] = a
         for a in self.nodes:
             a.build_covers()
+
+    def generate_alt(self, many, targs):
+        print "let's add ", many
+        for i in xrange(many):
+            n = nod.Node(self)
+            self.nodes.append(n)
+        if not targs:
+            eds.populate_targets(self, targs)
+            eds.set_neighborhood(self)
+            eds.set_targets(self)
+        else:
+            print "targs is equal to ", targs
+            print ("there are %d nodes" %(len(self.nodes)))
+            if targs > (len(self.nodes)*.5)*(len(self.nodes)-1):
+                targs = (len(self.nodes)*.5)*(len(self.nodes)-1)
+                print "but now targs is equal to ", targs
+            den.set_neighborhood(self, targs)
+            den.set_targets(self)
+        self.approx = seq.sequential(self)
+        for a in self.targets:
+            a.keyed_uv[a.id] = a.uv
+        for a in self.nodes:
+            self.keyed_nodes[a.id] = a
+        for a in self.nodes:
+            a.build_neg_covers()
+            
+
+    def once(self):
+        for a in self.nodes:
+            for b in a.neighbors:
+                aut.automata(a, b.id)
 
     def go(self):
         time = 0
