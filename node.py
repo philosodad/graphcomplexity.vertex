@@ -2,9 +2,6 @@
 #paul daigle
 #Class file that contains the main process (sensor nodes) and logic for the simulation
 
-#import SimPy.SimulationTrace as sim
-import SimPy.Simulation as sim
-#import SimPy.SimulationStep as sim
 import random as ran
 import scipy as sci
 import ctno as ctn

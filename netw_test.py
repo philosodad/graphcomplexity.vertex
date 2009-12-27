@@ -81,6 +81,12 @@ class NetwTestCase(unittest.TestCase):
             a.build_covers()
         self.nodesource.go()
 
+    def test_once(self):
+        for a in self.nodesource.nodes:
+            a.build_covers()
+        self.nodesource.once()
+        assert self.nodesource.targets_covered()
+
 suite = unittest.makeSuite(NetwTestCase, 'test')
 runner = unittest.TextTestRunner()
 runner.run(suite)
