@@ -6,7 +6,7 @@ import random as ran
 import scipy as sci
 import ctno as ctn
 import copy
-import cove as cov
+import neco as cov
 from obal import G as G
 import bedg as bil
 import auto as aut
