@@ -25,10 +25,11 @@ def automata(n, sender):
         elif (n.id not in scc.node_list and (set([keyed_neighbors[a].on for a in scc.node_list]) - set([True]) == set([]))):
             if n.on:
                 n.on = False
+                print "turned ", n.id, " off. ", n.on
                 scc.covered = True
                 n.update_covers()
                 for a in n.neighbors:
-                 #   print("%s calling %s.noto" %(n.id, a.id))
+                    print("%s calling %s.auto" %(n.id, a.id))
                     automata(a, n.id)
                 return None
             else:
@@ -38,6 +39,7 @@ def automata(n, sender):
         elif (n.id in scc.node_list and (len(set([keyed_neighbors[a].on for a in (scc.node_list-set([n.id]))])) < 2)):
             if not n.on:
                 n.on = True
+                print "turned ", n.id, " on. ", n.on
                 scc.covered = True
                 n.update_covers()
                 for a in n.neighbors:
