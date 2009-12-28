@@ -14,27 +14,10 @@ class T_NodeSource(netw.NodeSource):
         self.targets = []
         
 
-    def go(self):
-        time = 0
-        first = 0
+    def once(self):
         if self.targets:
-            while self.targets_coverable():
+            if self.targets_coverable():
                 self.set_targets()
-                if first == 0:
-                    first = len(filter(lambda a: a.on, self.nodes))
-                self.nodes.sort()
-                current_node = filter(lambda a: a.on, self.nodes)[0]
-                time = time + current_node.battery_life
-    #            print "t_time: ", time, "cover: ", [a.id for a in filter(lambda b: b.on, self.nodes)]
-                current_node.on = False
-                for a in filter(lambda a: a.on, self.nodes):
-    #                print ("node %s battery life %d" %(a.id, a.battery_life))
-                    a.battery_life = a.battery_life - current_node.battery_life
-     #               print ("node %s battery life %d" %(a.id, a.battery_life))
-                current_node.battery_life = 0
-        return first, time
-
-            
 
     def output(self, time):
         x = len(self.targets)

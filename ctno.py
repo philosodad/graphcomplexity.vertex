@@ -8,10 +8,10 @@ import SimPy.Simulation as sim
 import random as ran
 import scipy as sci
 import copy
-import cove as cov
+import neco as cov
 import geom as geo
 from obal import G as G
-import bild as bil
+import bedg as bil
 import caut as cau
 
 class T_Node(object):
