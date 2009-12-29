@@ -30,8 +30,9 @@ def main():
             G.low = 15
             G.high = 15
             d = int(a)
-    noweight_seq = open("unweighted_seq.dat", 'w')
-    noweight_fra = open('unweighted_fra.dat', 'w')
+    noweight_seq = open("unweighted-seq.dat", 'w')
+    noweight_fra = open('unweighted-fra.dat', 'w')
+    noweight_deg = open('unweighted-deg.dat', 'w')
     clik = .5 * (s * (s-1))
     step = int((((clik-d) / (i-1)) + 1))
     for a in range(i):
@@ -58,8 +59,9 @@ def main():
         degra = degre / float(count)
         nsize = len(net.nodes)
         print ssiza, " ", fsiza 
-        noweight_seq.write("%d %d\n" %(degra, ssiza))
-        noweight_fra.write("%d %d\n" %(degra, fsiza))
+        noweight_seq.write("%d %d\n" %(a, ssiza))
+        noweight_fra.write("%d %d\n" %(a, fsiza))
+        noweight_deg.write("%d %d %d %d\n" %(degra, ssiza, fsiza, a))
 
 def mod_dif(f,s):
     diff = map(lambda x,y: x-y, f,s)
