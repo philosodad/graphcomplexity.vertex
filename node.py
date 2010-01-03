@@ -22,10 +22,12 @@ class Node(object):
         self.targets = []
         self.neighbors = []
         self.covers = []
+        self.n_covers = []
         self.on = True
         self.current_cover = None
         self.current_cover_index = 0
         self.parent = parent
+        self.keyed_weights = {}
 
     def __cmp__(self, other):
         if self.battery_life < other.battery_life:
@@ -52,12 +54,16 @@ class Node(object):
     def build_covers(self):
         if len(self.targets) > 0:
             bil.init_covers(self)
-            bil.update_degree(self)
             bil.update_lifetime(self)
+            bil.update_degree(self)
             bil.update_on(self)
             self.covers.sort()
             self.current_cover_index = 0
             self.current_cover = self.covers[0]
+            if self.id in self.current_cover.node_list:
+                self.on = True
+            else:
+                self.on = False
         else:
             self.on = False
 
@@ -66,8 +72,8 @@ class Node(object):
             self.covers = filter(lambda b: a.id not in b.node_list, self.covers)
         if self.battery_life == 0:
             self.covers = filter(lambda b: self.id not in b.node_list, self.covers)
-        bil.update_degree(self)
         bil.update_lifetime(self)
+        bil.update_degree(self)
         bil.update_on(self)
         self.covers.sort()
 
@@ -77,5 +83,21 @@ class Node(object):
                 return a
         return None
 
+    def neighbors_on(self):
+        if self.neighbors:
+            for a in self.neighbors:
+                if a.on == False:
+                    return False
+        else:
+            return False
+        return True
+
+    def targets_covered(self):
+        if self.targets:
+            for a in self.targets:
+                if a.covered == False:
+                    return False
+        return True
+            
 
             

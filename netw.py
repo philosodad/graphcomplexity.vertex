@@ -23,6 +23,13 @@ class NodeSource(object):
         self.approx = 0
         NodeSource.Next_id += 1
         
+
+    def key(self):
+        for a in self.targets:
+            a.keyed_uv[a.id] = a.uv
+        for a in self.nodes:
+            self.keyed_nodes[a.id] = a
+
     def generate(self, many, targs):
         print "let's add ", many
         for i in xrange(many):
@@ -41,17 +48,14 @@ class NodeSource(object):
             den.set_neighborhood(self, targs)
             den.set_targets(self)
         self.approx = seq.sequential(self)
-        for a in self.targets:
-            a.keyed_uv[a.id] = a.uv
-        for a in self.nodes:
-            self.keyed_nodes[a.id] = a
+        self.key()
         for a in self.nodes:
             a.build_covers()            
 
+
     def once(self):
         for a in self.nodes:
-            for b in a.neighbors:
-                aut.automata(a, b.id)
+            aut.automata(a)
         return len(filter(lambda a: a.on == True, self.nodes))
 
     def feed(self, other):
