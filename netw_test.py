@@ -82,6 +82,7 @@ class NetwTestCase(unittest.TestCase):
         self.nodesource.once()
         assert self.nodesource.targets_covered()
         print len(filter(lambda a: a.on == True, self.nodesource.nodes))
+        print [a.id for a in filter(lambda a: a.on == True, self.nodesource.nodes)]
         print [a.uv for a in self.nodesource.targets]
         
 
