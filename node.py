@@ -28,6 +28,8 @@ class Node(object):
         self.current_cover_index = 0
         self.parent = parent
         self.keyed_weights = {}
+        self.keyed_neighbors = {}
+        self.round_partner = None
 
     def __cmp__(self, other):
         if self.battery_life < other.battery_life:
