@@ -8,25 +8,28 @@ def gmm(net):
                 return True
         return False
 
-    def saturate(a):
-        uv = cop.copy(a.uv)
+    def saturate(t):
+        uv = cop.copy(t.uv)
         u = net.keyed_nodes[uv.pop()]
         v = net.keyed_nodes[uv.pop()]
-        if u.battery_life < v.battery_life:
-            update_weight(a,u)
+        if u.weight < v.weight:
+            update_weight(t,u)
         else:
-            update_weight(a,v)
+            update_weight(t,v)
+        u.weight = u.weight - t.weight
+        v.weight = v.weight - t.weight
 
     def update_weight(t,n):
         w = 0
-        for e in n.targets:
+        for e in n.targets:                
             w = w+e.weight
-        w = n.battery_life - w
+        w = n.weight - w
         t.weight = w
         n.on = True
 
     for a in net.nodes:
         a.on = False
+        a.weight = a.battery_life
     for a in net.targets:
         if saturation(a):
             a.weight = 0

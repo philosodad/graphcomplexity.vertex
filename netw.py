@@ -11,6 +11,8 @@ import tast as tas
 import edst as eds
 import sequ as seq
 import dens as den
+import nolp as nol
+import dgmm as dgm
 from obal import G as G
 
 class NodeSource(object):
@@ -20,7 +22,6 @@ class NodeSource(object):
         self.nodes = []
         self.targets = []
         self.keyed_nodes = {}
-        self.approx = 0
         NodeSource.Next_id += 1
         
 
@@ -47,11 +48,25 @@ class NodeSource(object):
                 print "but now targs is equal to ", targs
             den.set_neighborhood(self, targs)
             den.set_targets(self)
-        self.approx = seq.sequential(self)
         self.key()
         for a in self.nodes:
             a.build_covers()            
 
+    def seq(self):
+        return seq.sequential(self)
+
+    def weighted_seq(self):
+        return nol.gmm(self)
+
+    def weighted_dist(self):
+        dgm.init(self)
+        while not self.targets_covered():
+            dgm.set_partners(self)
+            dgm.set_edge(self)
+        on_list = filter(lambda a: a.on, self.nodes)
+        w = sum([b.battery_life for b in on_list])
+        l = len(on_list)
+        return l, w
 
     def once(self):
         for a in self.nodes:

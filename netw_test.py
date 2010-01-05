@@ -86,6 +86,10 @@ class NetwTestCase(unittest.TestCase):
         print [a.uv for a in self.nodesource.targets]
         
 
+    def testWeightedDist(self):
+        self.nodesource.key()
+        print self.nodesource.weighted_dist()
+
 suite = unittest.makeSuite(NetwTestCase, 'test')
 runner = unittest.TextTestRunner()
 runner.run(suite)

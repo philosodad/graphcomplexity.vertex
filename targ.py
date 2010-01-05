@@ -8,6 +8,7 @@ class Target(object):
         self.id = Target.Next_id
         self.keyed_uv = {}
         self.weight = 0
+        self.covered = False
         Target.Next_id += 1
 
     def dup(self):

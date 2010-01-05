@@ -30,6 +30,7 @@ class Node(object):
         self.keyed_weights = {}
         self.keyed_neighbors = {}
         self.round_partner = None
+        self.weight = 0
 
     def __cmp__(self, other):
         if self.battery_life < other.battery_life:
