@@ -69,6 +69,13 @@ class DgmmTestCase(unittest.TestCase):
             if a.round_partner:
                 assert self.nodesource.keyed_nodes[a.round_partner].round_partner == a.id
 
+    def testSetEdge(self):
+        self.nodesource.key()
+        dgm.init(self.nodesource)
+        dgm.set_partners(self.nodesource)
+        dgm.set_edge(self.nodesource)
+        assert len(filter(lambda a: a.on, self.nodesource.nodes)) == 2
+
 
 suite = unittest.makeSuite(DgmmTestCase, 'test')
 runner = unittest.TextTestRunner()
